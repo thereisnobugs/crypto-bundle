@@ -8,12 +8,14 @@ use AgentSIB\CryptoBundle\Utils\ClassUtils;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'agentsib_crypto:reencrypt', description: 'Re-encrypt doctrine data', aliases: ['agentsib_crypto:reecrypt'])]
 class ReencryptDataCommand extends Command
 {
     public function __construct(
@@ -26,12 +28,7 @@ class ReencryptDataCommand extends Command
 
     protected function configure(): void
     {
-        $this
-            ->setName('agentsib_crypto:reencrypt')
-            ->setAliases(['agentsib_crypto:reecrypt'])
-            ->setDescription('Re-encrypt doctrine data');
-
-        $this->addOption('em', null, InputOption::VALUE_REQUIRED, 'Entity manager', null);
+        $this->addOption('em', null, InputOption::VALUE_REQUIRED, 'Entity manager');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -61,15 +58,14 @@ class ReencryptDataCommand extends Command
             $entityRepository = $em->getRepository($entityMetadata->name);
 
             $totalCount = $entityRepository->createQueryBuilder('s')->select('count(s)')->getQuery()->getSingleScalarResult();
-            $iterator = $entityRepository->createQueryBuilder('s')->getQuery()->iterate();
+            $iterator = $entityRepository->createQueryBuilder('s')->getQuery()->toIterable();
 
             $progressBar = new ProgressBar($output, $totalCount);
 
             $entityReflectionClass = new \ReflectionClass($entityMetadata->name);
             $propertiesArray = $this->getEncryptionableProperties($entityMetadata);
 
-            foreach ($iterator as $row) {
-                $entity = current($row);
+            foreach ($iterator as $entity) {
                 foreach ($propertiesArray as $encryptedProperty => $decryptedProperty) {
                     $refDecryptedProperty = $entityReflectionClass->getProperty($decryptedProperty);
                     $refEncryptProperty = $entityReflectionClass->getProperty($encryptedProperty);
@@ -82,7 +78,8 @@ class ReencryptDataCommand extends Command
                     $encValue = $this->cryptoService->encrypt($curValue);
                     ClassUtils::setPropertyValue($entity, $refEncryptProperty, $encValue);
                 }
-                $em->flush($entity);
+
+                $em->flush();
 
                 $em->detach($entity);
                 unset($entity);

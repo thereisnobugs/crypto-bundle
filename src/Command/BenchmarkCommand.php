@@ -3,12 +3,14 @@
 namespace AgentSIB\CryptoBundle\Command;
 
 use AgentSIB\CryptoBundle\Service\CryptoService;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'agentsib_crypto:benchmark', description: 'Benchmark cipher')]
 class BenchmarkCommand extends Command
 {
     public function __construct(
@@ -20,9 +22,6 @@ class BenchmarkCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName('agentsib_crypto:benchmark')
-            ->setDescription('Benchmark cipher');
-
         $this->addOption('count', null, InputOption::VALUE_REQUIRED, 'Count operation', 1000);
         $this->addOption('length', null, InputOption::VALUE_REQUIRED, 'Data length (bytes)', 100);
     }

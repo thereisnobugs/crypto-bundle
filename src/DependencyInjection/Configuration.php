@@ -58,6 +58,7 @@ class Configuration implements ConfigurationInterface
                                     return true;
                                 }
                             }
+
                             return false;
                         })
                         ->thenInvalid('Key of cipher format error. Expected: "v[0-9]+"')
@@ -73,9 +74,7 @@ class Configuration implements ConfigurationInterface
                 ->isRequired()
                 ->example('v1, v2, v3')
                 ->validate()
-                    ->ifTrue(function ($v) {
-                        return !preg_match('/^v[0-9]+$/', $v);
-                    })
+                    ->ifTrue(fn($v) => !preg_match('/^v[0-9]+$/', $v))
                     ->thenInvalid('Value of current_cipher cipher must has format "v[0-9]+"')
                 ->end()
             ->end();
@@ -91,15 +90,11 @@ class Configuration implements ConfigurationInterface
 
         $secretSourcesPrototypeNode
             ->validate()
-                ->ifTrue(function ($v) {
-                    return count($v) > 1;
-                })
+                ->ifTrue(fn($v) => count($v) > 1)
                 ->thenInvalid('You must set only one secret source')
             ->end()
             ->validate()
-                ->ifTrue(function ($v) {
-                    return count($v) == 0;
-                })
+                ->ifTrue(fn($v) => count($v) === 0)
                 ->thenInvalid('At lease one secret source required')
             ->end();
     }

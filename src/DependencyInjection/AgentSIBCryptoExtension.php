@@ -93,9 +93,9 @@ class AgentSIBCryptoExtension extends Extension
             $cipherDefinition = new ChildDefinition($ciphers[strtolower($cipherConfig['cipher'])]);
             $cipherDefinition->replaceArgument(0, new Reference(sprintf('agentsib_crypto.secret_source.%s', $cipherConfig['secret_source'])));
 
-            $cipherDefinition->addTag('agentsib_crypto.cipher', array(
+            $cipherDefinition->addTag('agentsib_crypto.cipher', [
                 'version'  =>  $version
-            ));
+            ]);
 
             $cipherServiceId = 'agentsib_crypto.cipher.' . $version;
 

@@ -128,6 +128,7 @@ class DoctrineEncryptListener
                                 throw $e;
                             }
                         }
+
                         if ($currentValue === false) {
                             ClassUtils::setPropertyValue($entity, $refEncryptedProperty, $currentValue);
                         } else {
@@ -157,6 +158,7 @@ class DoctrineEncryptListener
                                 throw $e;
                             }
                         }
+
                         ClassUtils::setPropertyValue($entity, $refDecryptedProperty, $currentValue);
                         break;
 
@@ -185,6 +187,7 @@ class DoctrineEncryptListener
                 }
             }
         }
+
         if ($embeddedEntity) {
             $this->processFields($embeddedEntity, $operation);
         }

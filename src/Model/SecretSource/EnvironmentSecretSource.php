@@ -20,6 +20,7 @@ class EnvironmentSecretSource implements SecretSourceInterface
         if ($value === false) {
             throw new SecretSourceExtension(sprintf('Environment %s not exists!', $this->environmentName));
         }
+
         return $value;
     }
 }

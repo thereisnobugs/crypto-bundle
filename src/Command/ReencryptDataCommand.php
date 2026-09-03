@@ -49,6 +49,7 @@ class ReencryptDataCommand extends Command
             if ($entityMetadata->isMappedSuperclass) {
                 continue;
             }
+
             $properties = $this->getEncryptionableProperties($entityMetadata);
 
             if (count($properties) == 0) {

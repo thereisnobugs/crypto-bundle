@@ -20,6 +20,7 @@ class FileContentSecretSource implements SecretSourceInterface
         if (!file_exists($this->fileName)) {
             throw new SecretSourceExtension(sprintf('File "%s" not exists', $this->fileName));
         }
+
         if (!is_readable($this->fileName)) {
             throw new SecretSourceExtension(sprintf('File "%s" is not readable', $this->fileName));
         }

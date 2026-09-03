@@ -9,12 +9,16 @@ class AES256OpenSSLCipher extends AbstractCipher
 {
     /** @var string  */
     protected $algo = 'aes-256-cbc';
+
     /** @var string  */
     protected $hash = 'sha256';
+
     /** @var int  */
     protected $iterations = 4096;
+
     /** @var int  */
     protected $hmacSize = 32;
+
     /** @var int  */
     protected $keySize = 16;
 

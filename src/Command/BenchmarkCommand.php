@@ -30,8 +30,8 @@ class BenchmarkCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $count = intval($input->getOption('count'));
-        $length = intval($input->getOption('length'));
+        $count = (int)$input->getOption('count');
+        $length = (int)$input->getOption('length');
 
         if ($count <= 0 || $length <= 0) {
             throw new \RuntimeException('Invalid input parameters');

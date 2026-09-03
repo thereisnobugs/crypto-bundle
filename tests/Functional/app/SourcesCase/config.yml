@@ -1,0 +1,13 @@
+imports:
+    - { resource: '../config/default.yml' }
+
+agentsib_crypto:
+    secret_sources:
+        simple_src: { simple: alpha-secret-value }
+        const_src: { php_constant: CRYPTO_TEST_PHP_CONSTANT }
+        file_src: { file_content: '%kernel.project_dir%/tests/Fixtures/secret-file.txt' }
+        env_src: { environment: CRYPTO_TEST_ENV_SECRET }
+        chained: { chain_xor: [simple_src, const_src, file_src, env_src] }
+    ciphers:
+        v1: { cipher: aes256, secret_source: chained }
+    current_cipher: v1

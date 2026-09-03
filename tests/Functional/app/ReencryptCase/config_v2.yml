@@ -1,0 +1,22 @@
+imports:
+    - { resource: '../config/default.yml' }
+
+doctrine:
+    dbal:
+        url: 'sqlite:///%kernel.project_dir%/var/test-reencrypt.db3'
+    orm:
+        mappings:
+            CryptoTest:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/tests/Fixtures/Entity'
+                prefix: 'AgentSIB\CryptoBundle\Tests\Fixtures\Entity'
+
+agentsib_crypto:
+    secret_sources:
+        old: { simple: reencrypt-old-secret }
+        new: { simple: reencrypt-new-secret }
+    ciphers:
+        v1: { cipher: aes256, secret_source: old }
+        v2: { cipher: aes256, secret_source: new }
+    current_cipher: v2

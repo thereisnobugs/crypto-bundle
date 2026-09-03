@@ -4,5 +4,4 @@ services:
     logger: { class: Psr\Log\NullLogger }
 doctrine:
     dbal:
-        driver: 'pdo_sqlite'
         url: 'sqlite:///%kernel.project_dir%/var/test.db3'

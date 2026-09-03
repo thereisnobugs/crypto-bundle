@@ -2,9 +2,9 @@
 
 namespace AgentSIB\CryptoBundle\Tests\Functional;
 
-class FirstTest extends KernelTestCase
+class BundleRegistrationTest extends KernelTestCase
 {
-    public function testKernelLoad()
+    public function testKernelRegistersCryptoServiceInContainer(): void
     {
         $kernel = self::createKernel(['test_case' => 'FirstCase', 'root_config' => 'config.yml']);
         $kernel->boot();

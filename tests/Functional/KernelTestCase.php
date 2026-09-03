@@ -21,16 +21,17 @@ class KernelTestCase extends BaseKernelTestCase
 
     protected static function deleteTmpDir()
     {
-        if (!file_exists($dir = sys_get_temp_dir().'/'.static::getVarDir())) {
+        if (!file_exists($dir = sys_get_temp_dir() . '/' . static::getVarDir())) {
             return;
         }
+
         $fs = new Filesystem();
         $fs->remove($dir);
     }
 
     protected static function getKernelClass(): string
     {
-        require_once __DIR__.'/app/AppKernel.php';
+        require_once __DIR__ . '/app/AppKernel.php';
 
         return AppKernel::class;
     }
@@ -46,14 +47,14 @@ class KernelTestCase extends BaseKernelTestCase
         return new $class(
             static::getVarDir(),
             $options['test_case'],
-            isset($options['root_config']) ? $options['root_config'] : 'config.yml',
-            isset($options['environment']) ? $options['environment'] : strtolower(static::getVarDir().$options['test_case']),
-            isset($options['debug']) ? $options['debug'] : true
+            $options['root_config'] ?? 'config.yml',
+            $options['environment'] ?? strtolower(static::getVarDir() . $options['test_case']),
+            $options['debug'] ?? true
         );
     }
 
-    protected static function getVarDir()
+    protected static function getVarDir(): string
     {
-        return 'SB'.substr(strrchr(get_called_class(), '\\'), 1);
+        return 'SB' . substr(strrchr(static::class, '\\'), 1);
     }
 }

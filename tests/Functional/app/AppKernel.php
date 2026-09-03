@@ -8,22 +8,22 @@ use Symfony\Component\HttpKernel\Kernel;
 
 class AppKernel extends Kernel
 {
-    private $varDir;
     private $testCase;
+
     private $rootConfig;
 
-    public function __construct($varDir, $testCase, $rootConfig, $environment, $debug)
+    public function __construct(private $varDir, $testCase, $rootConfig, string $environment, bool $debug)
     {
         if (!is_dir(__DIR__.'/'.$testCase)) {
             throw new \InvalidArgumentException(sprintf('The test case "%s" does not exist.', $testCase));
         }
-        $this->varDir = $varDir;
         $this->testCase = $testCase;
 
         $fs = new Filesystem();
         if (!$fs->isAbsolutePath($rootConfig) && !is_file($rootConfig = __DIR__.'/'.$testCase.'/'.$rootConfig)) {
             throw new \InvalidArgumentException(sprintf('The root config "%s" does not exist.', $rootConfig));
         }
+
         $this->rootConfig = $rootConfig;
 
         parent::__construct($environment, $debug);
@@ -48,17 +48,17 @@ class AppKernel extends Kernel
         return sys_get_temp_dir().'/'.$this->varDir.'/'.$this->testCase.'/logs';
     }
 
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load($this->rootConfig);
     }
 
-    public function serialize()
+    public function serialize(): string
     {
-        return serialize(array($this->varDir, $this->testCase, $this->rootConfig, $this->getEnvironment(), $this->isDebug()));
+        return serialize([$this->varDir, $this->testCase, $this->rootConfig, $this->getEnvironment(), $this->isDebug()]);
     }
 
-    public function unserialize($str)
+    public function unserialize($str): void
     {
         $a = unserialize($str);
         $this->__construct($a[0], $a[1], $a[2], $a[3], $a[4]);

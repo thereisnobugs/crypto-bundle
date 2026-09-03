@@ -3,6 +3,7 @@
 namespace AgentSIB\CryptoBundle\DependencyInjection;
 
 use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\SecretSourceFactoryInterface;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Console\Application;
@@ -15,14 +16,14 @@ use Symfony\Component\DependencyInjection\Reference;
 class AgentSIBCryptoExtension extends Extension
 {
     /** @var SecretSourceFactoryInterface[] */
-    private $secretSourceFactories = [];
+    private array $secretSourceFactories = [];
 
-    public function addSecretSourceFactory(SecretSourceFactoryInterface $factory)
+    public function addSecretSourceFactory(SecretSourceFactoryInterface $factory): void
     {
         $this->secretSourceFactories[$factory->getName()] = $factory;
     }
 
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = $this->getConfiguration($configs, $container);
 
@@ -42,7 +43,7 @@ class AgentSIBCryptoExtension extends Extension
         $cryptoServiceDefinition->replaceArgument(0, $config['current_cipher']);
     }
 
-    public function getConfiguration(array $config, ContainerBuilder $container)
+    public function getConfiguration(array $config, ContainerBuilder $container): ?ConfigurationInterface
     {
         $reflected = new \ReflectionClass($this);
         $namespace = $reflected->getNamespaceName();
@@ -58,7 +59,7 @@ class AgentSIBCryptoExtension extends Extension
         return null;
     }
 
-    private function loadSecretSources(array $config, ContainerBuilder $container)
+    private function loadSecretSources(array $config, ContainerBuilder $container): void
     {
         foreach ($config as $secretSourceName => $secretSourceConfig) {
             $factoryName = key($secretSourceConfig);
@@ -69,7 +70,7 @@ class AgentSIBCryptoExtension extends Extension
         }
     }
 
-    private function loadCiphers(array $config, ContainerBuilder $container)
+    private function loadCiphers(array $config, ContainerBuilder $container): void
     {
         $ciphersIds = $container->findTaggedServiceIds('agentsib_crypto.cipher.prototype');
 

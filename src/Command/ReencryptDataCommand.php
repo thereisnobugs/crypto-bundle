@@ -16,17 +16,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ReencryptDataCommand extends Command
 {
-    private CryptoService $cryptoService;
-    private ManagerRegistry $registry;
-
     public function __construct(
-        CryptoService $cryptoService,
-        ManagerRegistry $registry,
-        string $name = null
+        private readonly CryptoService $cryptoService,
+        private readonly ManagerRegistry $registry,
+        ?string $name = null
     ) {
         parent::__construct($name);
-        $this->cryptoService = $cryptoService;
-        $this->registry = $registry;
     }
 
     protected function configure(): void
@@ -52,7 +47,7 @@ class ReencryptDataCommand extends Command
 
             $properties = $this->getEncryptionableProperties($entityMetadata);
 
-            if (count($properties) == 0) {
+            if (count($properties) === 0) {
                 continue;
             }
 
@@ -95,6 +90,7 @@ class ReencryptDataCommand extends Command
                 gc_collect_cycles();
                 $progressBar->advance(1);
             }
+
             $progressBar->finish();
             $output->writeln('');
         }

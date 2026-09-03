@@ -9,16 +9,12 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    /** @var SecretSourceFactoryInterface[] */
-    private array $secretSourceFactories;
-
     /**
      * Configuration constructor.
-     * @param SecretSourceFactoryInterface[] $secretSourcesFactories
+     * @param SecretSourceFactoryInterface[] $secretSourceFactories
      */
-    public function __construct(array $secretSourcesFactories = [])
+    public function __construct(private readonly array $secretSourceFactories = [])
     {
-        $this->secretSourceFactories = $secretSourcesFactories;
     }
 
     public function getConfigTreeBuilder(): TreeBuilder
@@ -52,7 +48,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                     ->validate()
-                        ->ifTrue(function ($v) {
+                        ->ifTrue(function ($v): bool {
                             foreach (array_keys($v) as $key) {
                                 if (!preg_match('/^v[0-9]+/', $key)) {
                                     return true;

@@ -11,13 +11,12 @@ class CryptoService implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    private string $currentCipherVersion;
     /** @var CipherInterface[] */
     private array $ciphers = [];
 
-    public function __construct(string $currentCipherVersion)
-    {
-        $this->currentCipherVersion = $currentCipherVersion;
+    public function __construct(
+        private readonly string $currentCipherVersion,
+    ) {
     }
 
     public function addCipherForVersion(string $version, CipherInterface $cipher): void
@@ -26,8 +25,6 @@ class CryptoService implements LoggerAwareInterface
     }
 
     /**
-     * @param string $plainString
-     * @return string
      * @throws CryptoException
      */
     public function encrypt(string $plainString): string
@@ -43,13 +40,14 @@ class CryptoService implements LoggerAwareInterface
 
             return 'enc:' . $this->currentCipherVersion . '::' . $encryptedString;
         } catch (CryptoException $e) {
-            if ($this->logger) {
-                $this->logger->critical(sprintf(
+            $this->logger?->critical(
+                sprintf(
                     '%s: Encrypt filed. %s',
-                    get_class($e),
+                    $e::class,
                     $e->getMessage()
-                ));
-            }
+                )
+            );
+
             throw $e;
         }
     }
@@ -81,13 +79,14 @@ class CryptoService implements LoggerAwareInterface
 
             return $currentCipher->decrypt($encryptedString);
         } catch (CryptoException $e) {
-            if ($this->logger) {
-                $this->logger->critical(sprintf(
+            $this->logger?->critical(
+                sprintf(
                     '%s: Decrypt filed. %s',
-                    get_class($e),
+                    $e::class,
                     $e->getMessage()
-                ));
-            }
+                )
+            );
+
             throw $e;
         }
     }

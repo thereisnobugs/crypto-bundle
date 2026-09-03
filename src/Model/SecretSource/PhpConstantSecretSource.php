@@ -7,11 +7,9 @@ use AgentSIB\CryptoBundle\Model\SecretSourceInterface;
 
 class PhpConstantSecretSource implements SecretSourceInterface
 {
-    private string $constantName;
-
-    public function __construct(string $constantName)
-    {
-        $this->constantName = $constantName;
+    public function __construct(
+        private readonly string $constantName,
+    ) {
     }
 
     public function getSecret(): string

@@ -44,7 +44,7 @@ class ChainXORSecretSourceFactory implements SecretSourceFactoryInterface
                 ->end()
             ->end()
             ->validate()
-                ->always(function ($v) {
+                ->always(function (array $v): array {
                     if (is_array($v[$this->getName()]) && !count($v[$this->getName()])) {
                         unset($v[$this->getName()]);
                     }

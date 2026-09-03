@@ -6,11 +6,9 @@ use AgentSIB\CryptoBundle\Model\SecretSourceInterface;
 
 class SimpleSecretSource implements SecretSourceInterface
 {
-    private string $secret;
-
-    public function __construct(string $secret)
-    {
-        $this->secret = $secret;
+    public function __construct(
+        private readonly string $secret,
+    ) {
     }
 
     public function getSecret(): string

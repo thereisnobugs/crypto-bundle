@@ -19,14 +19,11 @@ class DoctrineEncryptListener
     public const OPERATION_ENCRYPT = 'encrypt';
     public const OPERATION_DECRYPT = 'decrypt';
 
-    private CryptoService $cryptoService;
-
-    public function __construct(CryptoService $cryptoService)
+    public function __construct(private readonly CryptoService $cryptoService)
     {
-        $this->cryptoService = $cryptoService;
     }
 
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return [
             Events::preUpdate,

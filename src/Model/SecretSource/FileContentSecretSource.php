@@ -7,13 +7,10 @@ use AgentSIB\CryptoBundle\Model\SecretSourceInterface;
 
 class FileContentSecretSource implements SecretSourceInterface
 {
-    private string $fileName;
-
-    public function __construct(string $fileName)
-    {
-        $this->fileName = $fileName;
+    public function __construct(
+        private readonly string $fileName,
+    ) {
     }
-
 
     public function getSecret(): string
     {

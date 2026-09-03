@@ -7,11 +7,9 @@ use AgentSIB\CryptoBundle\Model\SecretSourceInterface;
 
 class EnvironmentSecretSource implements SecretSourceInterface
 {
-    private ?string $environmentName;
-
-    public function __construct(?string $environmentName)
-    {
-        $this->environmentName = $environmentName;
+    public function __construct(
+        private readonly ?string $environmentName,
+    ) {
     }
 
     public function getSecret(): string

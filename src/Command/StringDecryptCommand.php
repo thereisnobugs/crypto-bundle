@@ -10,12 +10,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class StringDecryptCommand extends Command
 {
-    protected CryptoService $cryptoService;
-
-    public function __construct(CryptoService $cryptoService, string $name = null)
-    {
+    public function __construct(
+        protected CryptoService $cryptoService,
+        ?string $name = null,
+    ) {
         parent::__construct($name);
-        $this->cryptoService = $cryptoService;
     }
 
     protected function configure(): void
